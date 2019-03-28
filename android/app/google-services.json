@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "613744646926",
+    "firebase_url": "https://staffattendance-3bba1.firebaseio.com",
+    "project_id": "staffattendance-3bba1",
+    "storage_bucket": "staffattendance-3bba1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:613744646926:android:ee03993bd6af162a",
+        "android_client_info": {
+          "package_name": "com.example.staff_attendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "613744646926-ml21ul8cs806crd0rof0s598iv0qg4pf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa1uD1lE6gWdruFTQAayNalyctQIRMDEg"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
