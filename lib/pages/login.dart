@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:firebase_auth/firebase_auth.dart';
 
+import './home.dart';
 
 class Login extends StatefulWidget {
   final Widget child;
@@ -12,68 +14,76 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
-  String _email,_password;
+  String _email, _password;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Login"),
-      ),
-      body: Builder(
-        builder: (BuildContext context) => Container(
-              margin: EdgeInsets.all(10.0),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: <Widget>[
-                    Image.asset(
-                      'lib/assets/logo.png',
-                      width: 250.0,
-                      height: 250.0,
-                      alignment: Alignment.topCenter,
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Email"),
-                      onSaved: (value) => _email =value,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return ("Enter Email");
-                        }
-                      },
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(labelText: "Password"),
-                      obscureText: true,
-                      onSaved: (value) =>_password = value,
-                      validator: (value) {
-                        if (value.isEmpty) {
-                          return ("Enter Valid Password");
-                        }
-                      },
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(20.0),
-                      child: RaisedButton(
-                        child: Text("Login"),
-                        onPressed: () {
-                          if (_formKey.currentState.validate()) {
-                            Scaffold.of(context).showSnackBar(
-                                SnackBar(content: Text('Processing Data')));
+        appBar: AppBar(
+          title: Text("Login"),
+        ),
+        body: Builder(
+          builder: (context) => Container(
+                margin: EdgeInsets.all(10.0),
+                child: Form(
+                  key: _formKey,
+                  child: ListView(
+                    children: <Widget>[
+                      Hero(
+                        tag: "logo",
+                        child: Image.asset(
+                          'lib/assets/logo.png',
+                          width: 250.0,
+                          height: 250.0,
+                          alignment: Alignment.topCenter,
+                        ),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(labelText: "Email"),
+                        onSaved: (value) => _email = value,
+                        validator: (value) {
+                          if (value.isEmpty) {
+                            return ("Enter Email");
                           }
                         },
                       ),
-                    )
-                  ],
+                      TextFormField(
+                        decoration: InputDecoration(labelText: "Password"),
+                        obscureText: true,
+                        onSaved: (value) => _password = value,
+                        validator: (value) {
+                          if (value.isEmpty || value.length < 6) {
+                            return ("Enter Valid Password");
+                          }
+                        },
+                      ),
+                      Container(
+                        margin: EdgeInsets.all(20.0),
+                        child: RaisedButton(
+                          child: Text("Login"),
+                          onPressed: () => _logIn(context),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
-            ),
-      ),
-    );
+        ));
   }
 
-  void _logIn(){
-
+  Future _logIn(BuildContext contexta) async {
+    if (_formKey.currentState.validate()) {
+      _formKey.currentState.save();
+      //print(_email.trim() +"-"+_password);
+      try {
+        await FirebaseAuth.instance
+            .signInWithEmailAndPassword(
+                email: _email.trim(), password: _password);
+        
+      } catch (e) {
+        print(e.message);
+        Scaffold.of(contexta).showSnackBar(SnackBar(content: Text(e.message)));
+      }
+    }
   }
-
 }
