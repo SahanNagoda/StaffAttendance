@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../UI/drawer_control.dart';
+
 class Home extends StatelessWidget {
   final FirebaseUser user;
 
@@ -9,6 +11,10 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: DrawerControl(
+        selected: "Home",
+        user: user,
+      ),
       appBar: AppBar(
         title: Text("Home"),
         actions: <Widget>[
@@ -20,7 +26,7 @@ class Home extends StatelessWidget {
           )
         ],
       ),
-      body: Text("Welcome Home "+user.toString()),
+      body: Text("Welcome Home " + user.toString()),
     );
   }
 }
