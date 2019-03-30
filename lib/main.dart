@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import './Pages/login.dart';
 import './Pages/home.dart';
 import './Pages/splashscreen.dart';
@@ -14,7 +16,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Staff Attendance',
       theme: ThemeData(
-        
         primarySwatch: Colors.blue,
       ),
       home: _handleCurrentScreen(),
@@ -23,25 +24,26 @@ class MyApp extends StatelessWidget {
 
   Widget _handleCurrentScreen() {
     return new StreamBuilder<FirebaseUser>(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
-      
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          print("SplashScreen");
-          return  SplashScreen();
-        } else {
-          if (snapshot.hasData) {
-            print(snapshot.data);
-            return new Home(user: snapshot.data,);
-          } else if (snapshot.hasError){
-            print(snapshot.error);
-            return  SplashScreen();
+        stream: FirebaseAuth.instance.onAuthStateChanged,
+        builder: (BuildContext context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print("SplashScreen");
+            return SplashScreen();
+          } else {
+            
+            if (snapshot.hasData) {
+              print(snapshot.data);
+              
+              return new Home(
+                user: snapshot.data
+              );
+              
+            } else if (snapshot.hasError) {
+              print(snapshot.error);
+              return SplashScreen();
+            }
+            return new Login();
           }
-          return new Login();
-        }
-      }
-    );
+        });
+  }
 }
-
-}
-
