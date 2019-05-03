@@ -6,10 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../UI/drawer_control.dart';
 
-
 class Home extends StatefulWidget {
   final FirebaseUser user;
-  
 
   Home({Key key, this.user}) : super(key: key);
 
@@ -32,13 +30,14 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerControl(
-        selected: "Home",
-        user: widget.user,
-      ),
+      drawer:  DrawerControl(
+                selected: "Home",
+                user: widget.user,
+              ),
       appBar: AppBar(
         title: Text("Home"),
         actions: <Widget>[
+          
           FlatButton(
             child: Text("Sign Out"),
             onPressed: () {
@@ -54,6 +53,7 @@ class _HomeState extends State<Home> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: <Widget>[
+              Text(userDetail !=null ? "Welcome "+userDetail.data["Name"]:"Loading...",style: TextStyle(fontSize: 20.0),textAlign: TextAlign.center,),
               SizedBox(
                 height: 200.0,
                 child: RaisedButton(
@@ -86,10 +86,11 @@ class _HomeState extends State<Home> {
     DateTime now = DateTime.now();
 
     print("Arreived");
-    await Firestore.instance
-        .collection('Attendance')
-        .document()
-        .setData({'userId': widget.user.uid, 'Arrived': now, 'UserName' : userDetail.data["Name"]}).whenComplete(() {
+    await Firestore.instance.collection('Attendance').document().setData({
+      'userId': widget.user.uid,
+      'Arrived': now,
+      'UserName': userDetail.data["Name"]
+    }).whenComplete(() {
       print("Arreived Complete");
     }).catchError((e) => print("Arreived Error"));
     print("Arreived Finish");
@@ -109,19 +110,22 @@ class _HomeState extends State<Home> {
     print("Leaved Finish");
   }
 
-  Future _getUserDetail() async{
-    Firestore.instance
-                  .collection('users')
-                  .document(widget.user.uid)
-                  .get()
-                  .then((DocumentSnapshot ds) {
-                  print(ds.data["Name"]);
-                  setState(() {
-                    userDetail=ds;
-                  });
-                  
-              });
+  Future _getUserDetail() async {
+    print("Getting USerDetails");
+    await Firestore.instance
+        .collection('users')
+        .document(widget.user.uid)
+        .get()
+        .then((DocumentSnapshot ds) {
+      print("SnapShot " + ds.data.toString());
+      setState(() {
+        userDetail = ds;
+      });
+    });
+    print("Finish USerDetails");
   }
+
+  
 
   Future _checkAttendance() async {
     DateTime now = DateTime.now();
