@@ -22,6 +22,7 @@ class _HomeState extends State<Home> {
   bool isLeaved = false;
   @override
   void initState() {
+    
     _getUserDetail();
     _checkAttendance();
     super.initState();
@@ -111,6 +112,7 @@ class _HomeState extends State<Home> {
   }
 
   Future _getUserDetail() async {
+    
     print("Getting USerDetails");
     await Firestore.instance
         .collection('users')
